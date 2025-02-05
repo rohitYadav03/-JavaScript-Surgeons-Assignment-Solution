@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Countdown Timer</title>
+</head>
+<body>
+    <h1>Interactive Countdown Timer</h1>
+    <input type="number"  id="input">
+    <button id="btn">Start</button>
+    <div id="showTime"></div>
+<br>
+<button id="stop">stop</button>
+    <script>
+        let inputBox  = document.getElementById("input");
+        let button = document.getElementById("btn");
+        let showTime = document.getElementById("showTime")
+        let intervalId;
+        let timeInput;
+        button.addEventListener("click", () => {
+         timeInput = parseInt(inputBox.value);
+        if(timeInput<=0 || isNaN(timeInput)){
+            alert("Enter a valid time");
+            return;
+        }
+        inputBox.disabled = true;
+    button.disabled = true;
+
+     intervalId =  setInterval(() => {
+  if(timeInput >0){
+    timeInput--;
+    showTime.textContent = timeInput;
+   
+  }
+  else{
+    alert("time is up");
+    clearInterval(intervalId);
+    inputBox.disabled = false;
+    button.disabled = false;
+  inputBox.value = "";
+  showTime.textContent = "Time is up"
+  }
+
+        },1000)
+         
+        })
+    document.getElementById("stop").addEventListener("click", () => {
+            clearInterval(intervalId)
+    inputBox.disabled = false;
+    button.disabled = false;
+  inputBox.value = "";
+  showTime.textContent = "Time stoped at : " + timeInput;
+ 
+        })
+    </script>
+</body>
+</html>
