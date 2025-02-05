@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO APP</title>
+</head>
+<body>
+    <h1>TODO APP</h1>
+    <input type="text" id="input">
+    <button id="btn">ADD</button>
+    <ul id="list"></ul>
+
+    <script>
+        let inputBox = document.getElementById("input");
+        let addBtn = document.getElementById("btn");
+        let listContainer = document.getElementById("list");
+
+        function addTodo() {
+            if (inputBox.value.trim() === "") {
+                alert("Write something first");
+                return;
+            }
+
+            let listItem = document.createElement("li");
+            let textSpan = document.createElement("span");
+            textSpan.textContent = inputBox.value;
+            
+            let editBtn = document.createElement("button");
+            editBtn.textContent = "Edit";
+
+            let delBtn = document.createElement("button");
+            delBtn.textContent = "Delete";
+
+            listItem.append(textSpan, editBtn, delBtn);
+            listContainer.append(listItem);
+
+            delBtn.addEventListener("click", () => {
+                listItem.remove();
+                saveTodo();
+            });
+
+            editBtn.addEventListener("click", () => {
+                let newText = prompt("Edit your task:", textSpan.textContent);
+                if (newText) {
+                    textSpan.textContent = newText;
+                    saveTodo();
+                }
+            });
+
+            saveTodo();
+            inputBox.value = "";
+        }
+
+        function saveTodo() {
+            let todoArr = [];
+            document.querySelectorAll("li span").forEach(todo => {
+                todoArr.push(todo.textContent);
+            });
+            localStorage.setItem("newList", JSON.stringify(todoArr));
+        }
+
+        function loadTodo() {
+            let todos = JSON.parse(localStorage.getItem("newList")) || [];
+            todos.forEach(todoText => {
+                let listItem = document.createElement("li");
+                let textSpan = document.createElement("span");
+                textSpan.textContent = todoText;
+
+                let editBtn = document.createElement("button");
+                editBtn.textContent = "Edit";
+
+                let delBtn = document.createElement("button");
+                delBtn.textContent = "Delete";
+
+                listItem.append(textSpan, editBtn, delBtn);
+                listContainer.append(listItem);
+
+                delBtn.addEventListener("click", () => {
+                    listItem.remove();
+                    saveTodo();
+                });
+
+                editBtn.addEventListener("click", () => {
+                    let newText = prompt("Edit your task:", textSpan.textContent);
+                    if (newText) {
+                        textSpan.textContent = newText;
+                        saveTodo();
+                    }
+                });
+            });
+        }
+
+        addBtn.addEventListener("click", addTodo);
+        document.body.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                addTodo();
+            }
+        });
+
+        loadTodo();
+    </script>
+</body>
+</html>
