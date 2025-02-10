@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <input type="text" id="input" placeholder="Enter city name">
+    <button id="btn">Search</button>
+    <ul id="listContainer"></ul>
+
+    <script>
+        let inputBox = document.getElementById("input");
+        let button = document.getElementById("btn");
+        let listContainer = document.getElementById("listContainer");
+        const APIkey = "d6a1d201c591a1364f7d38ceeb019a7f";
+
+        function fetchWeather() {
+            let cityName = inputBox.value.trim();
+            if (cityName === "") {
+                alert("Please enter a city name!");
+                return;
+            }
+
+            let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${APIkey}`;
+
+            async function fetchData() {
+                try {
+                    let response = await fetch(apiUrl);
+                    let data = await response.json();
+
+                    if (data.cod !== 200) {
+                        alert("City not found! Please enter a valid city name.");
+                        return;
+                    }
+
+                    listContainer.innerHTML = "";
+
+                    let temperature = document.createElement("li");
+                    temperature.textContent = `Temperature: ${data.main.temp}°C`;
+
+                    let humidity = document.createElement("li");
+                    humidity.textContent = `Humidity: ${data.main.humidity}%`;
+
+                    let weatherDesc = document.createElement("li");
+                    weatherDesc.textContent = `Weather: ${data.weather[0].description}`;
+
+                    listContainer.appendChild(temperature);
+                    listContainer.appendChild(humidity);
+                    listContainer.appendChild(weatherDesc);
+
+                } catch (error) {
+                    console.error("Error fetching data:", error.message);
+                    alert("Something went wrong! Please try again.");
+                }
+            }
+            fetchData();
+           
+        }
+
+       
+        button.addEventListener("click", fetchWeather);
+
+        inputBox.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                fetchWeather();
+            }
+        });
+    </script>
+</body>
+</html>
