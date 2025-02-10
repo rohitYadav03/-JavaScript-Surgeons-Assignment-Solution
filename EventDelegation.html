@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Delegation</title>
+</head>
+<body>
+    <h1>Event Delegation Example</h1>
+    <input type="text" id="input">
+    <button id="btn">Add</button>
+    <ul id="list"></ul>
+
+    <script>
+        let listContainer = document.getElementById("list")
+        let inputBox = document.getElementById("input");
+        document.getElementById("btn").addEventListener("click", () => {
+            let li = document.createElement("li");
+            li.textContent = inputBox.value;
+         listContainer.append(li);
+         inputBox.value = ""
+        });
+        listContainer.addEventListener("click", (event) => {
+         if (event.target.tagName === "LI") {
+            event.target.remove();
+         }
+        })
+    </script>
+</body>
+</html>
