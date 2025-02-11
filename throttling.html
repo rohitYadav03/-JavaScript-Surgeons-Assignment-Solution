@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throttling</title>
+</head>
+<body>
+    <button id="btn">Click</button>
+
+    <script>
+// Method 1 for Throttling
+function trottle(func,delay){
+  let flag = true;
+  return function(...args){
+    let context = this;
+      if (!flag) return ;
+      flag = false;
+      func.apply(context,args)
+      setTimeout(() => {
+        flag = true;
+      }, delay);
+  }
+}
+
+// Method 2 for Throttling
+function throttle(func, delay) {
+    let lastExecutionTime = 0;  // Stores the last time `func` was executed
+
+    return function (...args) {
+        let context = this;
+        let now = Date.now();  // Get the current timestamp
+
+        if (now - lastExecutionTime >= delay) {  // Check if enough time has passed
+            func.apply(context, args);
+            lastExecutionTime = now;  // Update the last execution time
+        }
+    };
+}
+
+let buttonClickCount = 0
+
+
+function clickTime (){
+    let curTime = new Date().toLocaleTimeString();
+    console.log(`Click : ${buttonClickCount}, Time: ${curTime}`);
+    buttonClickCount++;
+}
+
+let betterClick = trottle(clickTime,1000);
+
+document.getElementById("btn").addEventListener("click",betterClick)
+
+    </script>
+</body>
+</html>
