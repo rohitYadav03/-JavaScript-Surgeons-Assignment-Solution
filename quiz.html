@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIZ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1{
+          margin-top: 5%;
+        }
+        .quiz-container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .option {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            background-color: #f4f4f4;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background-color: #ddd;
+        }
+        .correct {
+            background-color: lightgreen;
+        }
+        .incorrect {
+            background-color: lightcoral;
+        }
+        #score {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>QUIZ APP</h1>
+    <div class="quiz-container">
+        <div id="question-container" class="question"></div>
+        <div id="option-container"></div>
+        <p id="score"></p>
+    </div>
+
+    <script>
+        const quizQuestions = [
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Rome"],  
+                correctAnswer: "Paris"  
+            },
+            {
+                question: "Which language runs in a web browser?",
+                options: ["Java", "C", "Python", "JavaScript"],
+                correctAnswer: "JavaScript"
+            },
+            {
+                question: "What is 2 + 2?",
+                options: ["4", "5", "6", "7"],
+                correctAnswer: "4"
+            }
+        ];
+
+        let questionContainer = document.getElementById("question-container");
+        let optionContainer = document.getElementById("option-container");
+        let scoreDisplay = document.getElementById("score");
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function showQuestion() {
+            if (currentQuestionIndex < quizQuestions.length) {
+                let currentQuestion = quizQuestions[currentQuestionIndex];
+                questionContainer.textContent = currentQuestion.question;
+                optionContainer.innerHTML = ""; 
+
+                currentQuestion.options.forEach(option => {
+                    let btn = document.createElement("button");
+                    btn.textContent = option;
+                    btn.classList.add("option");
+                    btn.addEventListener("click", () => checkAnswer(btn, option, currentQuestion.correctAnswer));
+                    optionContainer.appendChild(btn);
+                });
+            } else {
+                displayFinalScore();
+            }
+        }
+
+        function checkAnswer(button, selectedAnswer, correctAnswer) {
+            let buttons = document.querySelectorAll(".option");
+            buttons.forEach(btn => btn.disabled = true);  
+            
+            if (selectedAnswer === correctAnswer) {
+                button.classList.add("correct");
+                score++;
+            } else {
+                button.classList.add("incorrect");
+            }
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                showQuestion();
+            }, 1000);
+        }
+
+        function displayFinalScore() {
+            questionContainer.textContent = "Quiz Completed!";
+            optionContainer.innerHTML = "";
+            scoreDisplay.textContent = `Your Final Score: ${score} / ${quizQuestions.length}`;
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
